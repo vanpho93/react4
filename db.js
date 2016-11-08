@@ -17,11 +17,7 @@ function query(sql, cb){
     }else{
       client.query(sql, function(err, result){
         done();
-        if(err){
-          console.log('LOI TRUY VAN ' + err);
-        }else{
-          return cb(result);
-        }
+        cb(err, result);
       });
     }
   });
@@ -29,8 +25,17 @@ function query(sql, cb){
 
 //query(`SELECT * FROM "User"`, cb);
 
-var username = 'vanpho93';
-var password = '12345';
-var sql = `INSERT INTO "User"("username", "password")
-           VALUES ('${username}', '${password}')`
-console.log(sql);
+function insertNewUser(username, password, image, email, cb){
+  var sql = `INSERT INTO "User"("username", "password", "image", "email")
+  VALUES ('${username}','${password}','${image}','${email}')`;
+  query(sql, cb);
+}
+
+insertNewUser('pho12', '123', '2.png', 'asdjfa', function(err, result){
+  if(err){
+    console.log('Khong thanh cong');
+  }else{
+    console.log(result);
+    console.log('Thanh cong');
+  }
+});
