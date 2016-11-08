@@ -25,17 +25,35 @@ function query(sql, cb){
 
 //query(`SELECT * FROM "User"`, cb);
 
-function insertNewUser(username, password, image, email, cb){
+function insertNewUser(username, password, image, email, cbSuccess, cbFail){
   var sql = `INSERT INTO "User"("username", "password", "image", "email")
   VALUES ('${username}','${password}','${image}','${email}')`;
-  query(sql, cb);
+  query(sql, function(err, result){
+    if(err){
+      cbFail();
+    }else{
+      cbSuccess();
+    }
+  });
 }
 
-insertNewUser('pho12', '123', '2.png', 'asdjfa', function(err, result){
-  if(err){
-    console.log('Khong thanh cong');
-  }else{
-    console.log(result);
-    console.log('Thanh cong');
-  }
+// insertNewUser('pho12', '123', '2.png', 'asdjfa', function(err, result){
+//   if(err){
+//     console.log('Khong thanh cong');
+//   }else{
+//     console.log(result);
+//     console.log('Thanh cong');
+//   }
+// });
+
+function checkSignIn(username, password, cb){
+  var sql = `SELECT * FROM "User" WHERE "username" = '${username}' AND
+  "password" = '${password}'`;
+  query(sql, function(err, result){
+    cb(result);
+  });
+}
+
+checkSignIn('pho1', '123dfd', function(result){
+  console.log(result);
 });
