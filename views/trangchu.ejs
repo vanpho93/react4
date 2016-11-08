@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>Chat realtime</title>
+    <script src="libs/react.js"></script>
+    <script src="libs/react-dom.js"></script>
+    <script src="libs/browser.min.js"></script>
+    <script src="libs/jquery-3.1.0.min.js"></script>
+    <script src="socket.io/socket.io.js"></script>
+    <!--  https://unpkg.com/babel-core@5.8.38/browser.min.js -->
+    <script type="text/javascript">
+      var socket = io('http://localhost:3000');
+      $(document).ready(function(){
+        alert(123);
+      });
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="text/babel" src="start.js">
+
+    </script>
+  </body>
+</html>
