@@ -1,4 +1,5 @@
 var pg = require('pg');
+var crypto = require('./crypto.js');
 var config = {
   user: 'postgres',
   password: 'khoapham',
@@ -27,17 +28,19 @@ function query(sql, cb){
 
 function insertNewUser(username, password, image, email, cbSuccess, cbFail){
   var sql = `INSERT INTO "User"("username", "password", "image", "email")
-  VALUES ('${username}','${password}','${image}','${email}')`;
+  VALUES ('${username}','${crypto.encrypt(password)}','${image}','${email}')`;
   query(sql, function(err, result){
     if(err){
-      cbFail();
+      cbFail(err);
     }else{
-      cbSuccess();
+      cbSuccess(result);
     }
   });
 }
 
-// insertNewUser('pho12', '123', '2.png', 'asdjfa', function(err, result){
+// insertNewUser('phcdhcddcd', '123', '2.png', 'asdjfa', function(e){
+//   console.log(e);
+// },function(err, result){
 //   if(err){
 //     console.log('Khong thanh cong');
 //   }else{
@@ -47,13 +50,27 @@ function insertNewUser(username, password, image, email, cbSuccess, cbFail){
 // });
 
 function checkSignIn(username, password, cb){
-  var sql = `SELECT * FROM "User" WHERE "username" = '${username}' AND
-  "password" = '${password}'`;
+  var sql = `SELECT * FROM "User" WHERE "username" = '${username}'`;
   query(sql, function(err, result){
-    cb(result);
+    cb(err, result);
   });
 }
+// function checkSignIn(username, password, cb){
+//   var sql = `SELECT * FROM "User" WHERE "username" = '${username}'`;
+//   query(sql, function(err, result){
+//     if(result.rowCount == 0){
+//       console.log('Khong ton tai user');
+//     }else{
+//       if(crypto.decrypt(result.rows[0].password) == password){
+//         console.log('Thanh cong');
+//       }else{
+//         console.log('Sai mat khau');
+//       }
+//     }
+//   });
+// }
 
-checkSignIn('pho1', '123dfd', function(result){
-  console.log(result);
-});
+module.exports = {
+  insertNewUser: insertNewUser,
+  checkSignIn: checkSignIn
+}
