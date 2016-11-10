@@ -26,7 +26,7 @@ function query(sql, cb){
 
 //query(`SELECT * FROM "User"`, cb);
 
-function insertNewUser(username, password, image, email, cbSuccess, cbFail){
+function insertNewUser(username, password, image, email, cbFail, cbSuccess){
   var sql = `INSERT INTO "User"("username", "password", "image", "email")
   VALUES ('${username}','${crypto.encrypt(password)}','${image}','${email}')`;
   query(sql, function(err, result){
@@ -68,7 +68,7 @@ function checkSignIn(username, password, cb){
 //       }
 //     }
 //   });
-// }
+
 
 module.exports = {
   insertNewUser: insertNewUser,
