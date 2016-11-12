@@ -15,4 +15,8 @@ var DangNhap = React.createClass(
   }
 );
 
+socket.on('XAC_NHAN_DANG_NHAP', function(data){
+  alert(data);
+});
+
 ReactDOM.render(<DangNhap/>, document.getElementById('root'));

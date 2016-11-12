@@ -49,7 +49,7 @@ function insertNewUser(username, password, image, email, cbFail, cbSuccess){
 //   }
 // });
 
-function checkSignIn(username, password, cb){
+function checkSignIn(username, cb){
   var sql = `SELECT * FROM "User" WHERE "username" = '${username}'`;
   query(sql, function(err, result){
     cb(err, result);

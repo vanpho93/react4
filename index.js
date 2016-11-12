@@ -56,4 +56,25 @@ app.post('/xulydangky', parser, function(req, res){
 
 io.on('connection', function(socket){
   console.log('New user connected');
+
+  socket.on('USER_DANG_NHAP', function(data){
+    var username = data.username;
+    var password = data.password;
+
+    require('./db.js').checkSignIn(username, function(err, result){
+      if(err){
+        socket.emit('XAC_NHAN_DANG_NHAP', 0); //Loi truy van
+      }else{
+        if(result.rowCount == 1){
+          if(password == require('./crypto').decrypt(result.rows[0].password)){
+            socket.emit('XAC_NHAN_DANG_NHAP', 2);
+          }else{
+            socket.emit('XAC_NHAN_DANG_NHAP', 3);
+          }
+        }else{
+          socket.emit('XAC_NHAN_DANG_NHAP', 1); //Khong ton tai username
+        }
+      }
+    });
+  });
 });
