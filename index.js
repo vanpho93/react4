@@ -17,6 +17,17 @@ app.get('/', function(req, res){
   res.render('trangchu');
 });
 
+app.post('/uploadNew',parser, function(req, res){
+  console.log('da vao day roi');
+  upload(req, res, function(err){
+    if(err){
+      res.send('LOI')
+    }else{
+      res.send('Thanh cong')
+    }
+  });
+});
+
 app.get('/dangky', function(req, res){
   res.render('dangky');
 });
