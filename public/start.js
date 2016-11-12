@@ -1,3 +1,24 @@
+var that;
+socket.on('XAC_NHAN_DANG_NHAP', function(data){
+  if(data == 2){
+    that.setState( {isLogedIn: true} );
+  }
+});
+var App = React.createClass(
+  {
+    getDefaultProps(){
+      that = this;
+    },
+    getInitialState(){
+      return {isLogedIn: false};
+    },
+    render(){
+      var xhtml = this.state.isLogedIn?<h1> Dang chat roi </h1>: <DangNhap/>
+      return  xhtml;
+    }
+  }
+);
+
 var DangNhap = React.createClass(
   {
     submit(){
@@ -15,8 +36,4 @@ var DangNhap = React.createClass(
   }
 );
 
-socket.on('XAC_NHAN_DANG_NHAP', function(data){
-  alert(data);
-});
-
-ReactDOM.render(<DangNhap/>, document.getElementById('root'));
+ReactDOM.render(<App/>, document.getElementById('root'));
