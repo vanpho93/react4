@@ -3,13 +3,45 @@ var app = express();
 var server = require('http').Server(app);
 var io = require('socket.io')(server);
 var uploader = require('./uploader.js')('avatar');
-
+var session = require('express-session');
 var bodyParser = require('body-parser');
 var parser = bodyParser.urlencoded({extended: false});
 //github.com/vanpho93
 app.set('view engine', 'ejs');
 app.set('views', './views');
 app.use(express.static('public'));
+
+app.use(session(
+  {
+    secret: 'djagh263%asdb23',
+    resave: false,
+    saveUninitialized: true,
+    cookie: {
+      maxAge: 2*60*60*1000
+    }
+  }
+));
+
+app.post('/xulydangnhap', parser, function(req, res){
+  var username = req.body.username;
+  var password = req.body.password;
+  require('./db.js').checkSignIn(username, function(err, result){
+    if(err){
+      res.send('0'); //Loi truy van
+    }else{
+      if(result.rowCount == 1){
+        if(password == require('./crypto').decrypt(result.rows[0].password)){
+          res.send('2'); //Dang nhap thanh cong
+          req.session.daDangNhap = true;
+        }else{
+          res.send('3'); //Sai mat khau
+        }
+      }else{
+        res.send('1'); //Khong ton tai username
+      }
+    }
+  });
+});
 
 server.listen(3000);
 
@@ -56,24 +88,4 @@ app.post('/xulydangky', parser, function(req, res){
 
 io.on('connection', function(socket){
   console.log('New user connected');
-
-  socket.on('USER_DANG_NHAP', function(data){
-    var username = data.username;
-    var password = data.password;
-    require('./db.js').checkSignIn(username, function(err, result){
-      if(err){
-        socket.emit('XAC_NHAN_DANG_NHAP', 0); //Loi truy van
-      }else{
-        if(result.rowCount == 1){
-          if(password == require('./crypto').decrypt(result.rows[0].password)){
-            socket.emit('XAC_NHAN_DANG_NHAP', 2);
-          }else{
-            socket.emit('XAC_NHAN_DANG_NHAP', 3);
-          }
-        }else{
-          socket.emit('XAC_NHAN_DANG_NHAP', 1); //Khong ton tai username
-        }
-      }
-    });
-  });
 });

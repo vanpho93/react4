@@ -56,7 +56,15 @@ var DangNhap = React.createClass(
       that.setState({status: 1});
     },
     submit(){
-      socket.emit('USER_DANG_NHAP', {username: this.refs.username.value, password: this.refs.password.value});
+      var u = this.refs.username.value;
+      var p = this.refs.password.value;
+      $.post('/xulydangnhap', {username: u, password: p}, function(data) {
+        if(data == 2){
+          that.setState({status: 3});
+        }else{
+          alert('Kiem tra lai username va password')
+        }
+      })
     },
     render(){
       return(
