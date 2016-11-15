@@ -10,7 +10,11 @@ var App = React.createClass(
   {
     getInitialState(){
       that = this;
-      return {status: 2};
+      if(daDangNhap == true){
+        return {status: 3};
+      }else{
+        return {status: 2};
+      }
     },
     render(){
       var t =this;

@@ -16,11 +16,20 @@ app.use(session(
     secret: 'djagh263%asdb23',
     resave: false,
     saveUninitialized: true,
-    cookie: {
-      maxAge: 2*60*60*1000
+    cookie:{
+      maxAge: 1000000
     }
   }
 ));
+
+app.use(function (req, res, next) {
+  if(req.session.a == undefined){
+    req.session.a = 0;
+  }else{
+    req.session.a ++;
+  }
+  next();
+})
 
 app.post('/xulydangnhap', parser, function(req, res){
   var username = req.body.username;
@@ -31,8 +40,9 @@ app.post('/xulydangnhap', parser, function(req, res){
     }else{
       if(result.rowCount == 1){
         if(password == require('./crypto').decrypt(result.rows[0].password)){
-          res.send('2'); //Dang nhap thanh cong
           req.session.daDangNhap = true;
+          res.send('2'); //Dang nhap thanh cong
+          console.log('dang nhap thanh cong');
         }else{
           res.send('3'); //Sai mat khau
         }
@@ -46,7 +56,10 @@ app.post('/xulydangnhap', parser, function(req, res){
 server.listen(3000);
 
 app.get('/', function(req, res){
-  res.render('trangchu');
+  if(req.session.daDangNhap == undefined){
+    req.session.daDangNhap = false;
+  }
+  res.render('trangchu', {daDangNhap: req.session.daDangNhap});
 });
 
 app.post('/uploadNew',parser, function(req, res){
@@ -88,4 +101,17 @@ app.post('/xulydangky', parser, function(req, res){
 
 io.on('connection', function(socket){
   console.log('New user connected');
+});
+
+app.get('/muave', function(req, res){
+  req.session.daMuaVe = true;
+  res.send('Ban da mua ve')
+});
+
+app.get('/vaorap', function(req, res){
+  if(req.session.daMuaVe){
+    res.send('welcome')
+  }else{
+    res.send('Hay mua ve')
+  }
 });
