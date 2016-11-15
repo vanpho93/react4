@@ -1,5 +1,5 @@
 var that;
-
+var list;
 socket.on('XAC_NHAN_DANG_NHAP', function(data){
   if(data == 2){
     that.setState( {isLogedIn: true} );
@@ -24,7 +24,7 @@ var App = React.createClass(
         }else if(t.state.status == 2){
           return <DangNhap/>
         }else{
-          return <h1>Dang chat</h1>
+          return <Chat/>
         }
       }
       return  (getHTML());
@@ -77,6 +77,40 @@ var DangNhap = React.createClass(
           <input type="password" ref="password" placeholder="password"/><br/><br/>
             <button onClick={this.submit}>Gui</button><br/><br/>
             <button onClick={this.signUp}>Dang ky</button>
+        </div>
+      );
+    }
+  }
+);
+
+var Chat = React.createClass(
+  {
+    render(){
+      return (
+        <div>
+          <input type="text" ref="txtMessage" placeholder="Enter your message"/>
+          <button>Gui tin nhan</button>
+          <ListMessage/>
+        </div>
+      );
+    }
+  }
+);
+
+var ListMessage = React.createClass(
+  {
+    getInitialState(){
+      list = this;
+      return {mang: ['abcd', 'dafa', 'dasfasd']}
+    },
+    render(){
+      return(
+        <div>
+        {
+          this.state.mang.map(function(element, index){
+          return <p key={index}>{element}</p>
+        })
+      }
         </div>
       );
     }
