@@ -47,7 +47,7 @@ app.post('/xulydangky', parser, function(req, res){
           res.send('Username da ton tai')
         },
         function(result){
-          res.send(result);
+          res.send('Thanh cong');
         }
       )
     }

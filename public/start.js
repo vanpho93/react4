@@ -1,9 +1,11 @@
 var that;
+
 socket.on('XAC_NHAN_DANG_NHAP', function(data){
   if(data == 2){
     that.setState( {isLogedIn: true} );
   }
 });
+
 var App = React.createClass(
   {
     getInitialState(){
@@ -33,7 +35,16 @@ var DangKy = React.createClass(
   {
     render(){
       return(
-        <h2> Form Dang Ky </h2>
+        <div>
+          <h2> Form Dang Ky </h2>
+          <form action="/xulydangky" id="formDangKy" method="post" enctype="multipart/form-data">
+            <input type="text" name="username" placeholder="username"/><br/><br/>
+            <input type="password" name="password" placeholder="password"/><br/><br/>
+            <input type="text" name="email" placeholder="email"/><br/><br/>
+            <input type="file" name="avatar"/><br/><br/>
+            <button id="btnDangKy" type="submit">Dang Ky</button>
+          </form>
+        </div>
       );
     }
   }
