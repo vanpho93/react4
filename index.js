@@ -101,6 +101,9 @@ app.post('/xulydangky', parser, function(req, res){
 
 io.on('connection', function(socket){
   console.log('New user connected');
+  socket.on('CLIENT_SEND_MESSAGE', function(data){
+    io.emit('SERVER_SEND_MESSAGE', data);
+  });
 });
 
 app.get('/muave', function(req, res){

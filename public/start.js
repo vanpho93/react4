@@ -6,6 +6,13 @@ socket.on('XAC_NHAN_DANG_NHAP', function(data){
   }
 });
 
+socket.on('SERVER_SEND_MESSAGE', function(data){
+  if(list != undefined){
+    list.state.mang.push(data);
+    list.setState(list.state);
+  }  
+});
+
 var App = React.createClass(
   {
     getInitialState(){
@@ -85,11 +92,14 @@ var DangNhap = React.createClass(
 
 var Chat = React.createClass(
   {
+    sendMessage(){
+      socket.emit('CLIENT_SEND_MESSAGE', this.refs.txtMessage.value);
+    },
     render(){
       return (
         <div>
           <input type="text" ref="txtMessage" placeholder="Enter your message"/>
-          <button>Gui tin nhan</button>
+          <button onClick={this.sendMessage}>Gui tin nhan</button>
           <ListMessage/>
         </div>
       );
