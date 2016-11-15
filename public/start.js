@@ -6,21 +6,44 @@ socket.on('XAC_NHAN_DANG_NHAP', function(data){
 });
 var App = React.createClass(
   {
-    getDefaultProps(){
-      that = this;
-    },
     getInitialState(){
-      return {isLogedIn: false};
+      that = this;
+      return {status: 2};
     },
     render(){
-      var xhtml = this.state.isLogedIn?<h1> Dang chat roi </h1>: <DangNhap/>
-      return  xhtml;
+      var t =this;
+      function getHTML(){
+        if(t.state.status == 1){
+          return <DangKy/>
+        }else if(t.state.status == 2){
+          return <DangNhap/>
+        }else{
+          return <h1>Dang chat</h1>
+        }
+      }
+      return  (getHTML());
+    },
+    componentDidMount(){
+
+    }
+  }
+);
+
+var DangKy = React.createClass(
+  {
+    render(){
+      return(
+        <h2> Form Dang Ky </h2>
+      );
     }
   }
 );
 
 var DangNhap = React.createClass(
   {
+    signUp(){
+      that.setState({status: 1});
+    },
     submit(){
       socket.emit('USER_DANG_NHAP', {username: this.refs.username.value, password: this.refs.password.value});
     },
@@ -30,6 +53,7 @@ var DangNhap = React.createClass(
           <input type="text" ref="username" placeholder="username"/><br/><br/>
           <input type="password" ref="password" placeholder="password"/><br/><br/>
             <button onClick={this.submit}>Gui</button><br/><br/>
+            <button onClick={this.signUp}>Dang ky</button>
         </div>
       );
     }

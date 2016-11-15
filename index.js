@@ -60,7 +60,6 @@ io.on('connection', function(socket){
   socket.on('USER_DANG_NHAP', function(data){
     var username = data.username;
     var password = data.password;
-
     require('./db.js').checkSignIn(username, function(err, result){
       if(err){
         socket.emit('XAC_NHAN_DANG_NHAP', 0); //Loi truy van
